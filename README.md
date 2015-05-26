@@ -1,7 +1,10 @@
 # Swag-ember
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+This an implementation of [swag](https://github.com/tunapanda/swag) using Ember.js and [swagmapviewer](https://github.com/tunapanda/swagmapviewer) using Ember.js and SVG manipulation and uses the foundation front-end library for the UI.
+
+Currently you can only login with Facebook, but you can currently bypass this by going straight to `/swagmaps/1`.
+
+See an example of this running at http://tunapanda.github.io/swag-ember
 
 ## Prerequisites
 
@@ -15,15 +18,16 @@ You will need the following things properly installed on your computer.
 
 ## Installation
 
-* `git clone <repository-url>` this repository
+* `git clone https://github.com/tunapanda/swag-ember` this repository
 * change into the new directory
 * `npm install`
 * `bower install`
 
 ## Running / Development
 
+* Edit config/environment.js with your xAPI details
 * `ember server`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
+* Visit at [http://localhost:4200](http://localhost:4200).
 
 ### Code Generators
 
@@ -41,10 +45,12 @@ Make use of the many generators for code, try `ember help generate` for more det
 
 ### Deploying
 
-Specify what it takes to deploy your app.
+Todo
 
 ## Further Reading / Useful Links
 
+* [swag](https://github.com/tunapanda/swag)
+* [swagmapviewer](https://github.com/tunapanda/swagmapviewer)
 * [ember.js](http://emberjs.com/)
 * [ember-cli](http://www.ember-cli.com/)
 * Development Browser Extensions
