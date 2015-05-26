@@ -1,0 +1,5 @@
+{{#unless session.isAuthenticated}}
+  {{login-form}}
+{{else}}
+{{#link-to 'swagmaps' class='button text-center'}}Go to Swagmaps >{{/link-to}}
+{{/unless}}

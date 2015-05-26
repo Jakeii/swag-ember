@@ -6,6 +6,15 @@ module.exports = function(environment) {
     environment: environment,
     baseURL: '/',
     locationType: 'auto',
+
+    contentSecurityPolicy: {
+      'frame-src': '\'self\' http://static.ak.facebook.com https://s-static.ak.facebook.com https://www.facebook.com',
+      'img-src': 'self https://www.facebook.com',
+      'style-src': '\'self\' \'unsafe-inline\'',
+      'script-src': '\'self\' http://connect.facebook.net https://graph.facebook.com',
+      'connect-src': '\'self\' ws://localhost:35729 ws://0.0.0.0:35729 http://0.0.0.0:4200/csp-report http://localhost:8000'
+    },
+
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
@@ -14,8 +23,28 @@ module.exports = function(environment) {
     },
 
     APP: {
-      // Here you can pass flags/options to your application instance
-      // when it is created
+      xAPIEndpoint: "http://localhost:8000/data/xAPI/",
+      xAPIUsername: "953b9fac8775b1806e3162c1794c7b12ffdccd61",
+      xAPIPassword: "7811a6436906242a93b5b986d8f760a33c75917e",
+
+      // overide the login email with this email
+      agentEmailOverride: 'jake@tunapanda.org',
+
+      // set to true to disable api requests and use fixtures in models/swagmap
+      useFixtures: true
+    }
+  };
+
+  ENV['simple-auth'] = {
+    store: 'simple-auth-session-store:local-storage',
+    'authenticationRoute': 'index'
+  };
+
+  ENV['torii'] = {
+    providers: {
+      'facebook-connect': {
+        appId: '345224532354098'
+      }
     }
   };
 

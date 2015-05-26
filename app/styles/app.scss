@@ -1,0 +1,36 @@
+@import "settings";
+
+@import "foundation";
+
+main {
+  margin-top: 40px;
+}
+
+.swag-map {
+  position: relative;
+  min-height: 500px;
+  min-width: 500px;
+
+  line {
+    stroke: #585EB5;
+    stroke-width: 2;
+  }
+}
+
+.swag-map-item {
+
+  circle {
+    fill: #585EB5;
+    transition: r 0.3s;
+
+    cursor: pointer;
+
+    &:hover {
+      r: 30
+    }
+  }
+
+  &.completed circle {
+    fill: darken(#585EB5, 30);
+  }
+}

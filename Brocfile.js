@@ -4,6 +4,18 @@ var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 var app = new EmberApp();
 
+app.import("bower_components/ember-localstorage-adapter/localstorage_adapter.js");
+
+app.import({
+  development: 'bower_components/tincan/build/tincan.js',
+  production: 'bower_components/tincan/build/tincan-min.js',
+});
+
+app.import({
+  development: 'bower_components/svg.js/dist/svg.js',
+  production: 'bower_components/svg.js/dist/svg.min.js',
+});
+
 // Use `app.import` to add additional libraries to the generated
 // output files.
 //

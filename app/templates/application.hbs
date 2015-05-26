@@ -1,3 +1,36 @@
-<h2 id="title">Welcome to Ember.js</h2>
+<nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    <li class="name">
+      <h1><a href="#">Swag</a></h1>
+    </li>
+     <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+  </ul>
 
-{{outlet}}
+  <section class="top-bar-section">
+    <!-- Right Nav Section -->
+    <ul class="right">
+      {{#if session.isAuthenticated}}
+        <li><a href="#" {{action 'logOut'}}>Logout</a></li>
+        <li class="has-dropdown">
+          <a href="#">{{currentUser.model.content.email}}</a>
+          <ul class="dropdown">
+              <li><a href="#">Something</a></li>
+          </ul>
+        </li>
+      {{/if}}
+    </ul>
+
+    <!-- Left Nav Section -->
+    <ul class="left">
+      <li>{{#link-to 'index'}}Home{{/link-to}}</li>
+      <li>{{#link-to 'swagmaps'}}Swag Maps{{/link-to}}</li>
+    </ul>
+  </section>
+</nav>
+
+<main>
+  <div class="row">
+    {{outlet}}
+  </div>
+</main>
