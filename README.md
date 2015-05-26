@@ -4,7 +4,7 @@ This an implementation of [swag](https://github.com/tunapanda/swag) using Ember.
 
 Currently you can only login with Facebook, but you can currently bypass this by going straight to `/swagmaps/1`.
 
-See an example of this running at http://tunapanda.github.io/swag-ember
+See an example of this running at http://jakeii.github.io/swag-ember
 
 ## Prerequisites
 
@@ -18,7 +18,7 @@ You will need the following things properly installed on your computer.
 
 ## Installation
 
-* `git clone https://github.com/tunapanda/swag-ember` this repository
+* `git clone https://github.com/jakeii/swag-ember.git` this repository
 * change into the new directory
 * `npm install`
 * `bower install`
