@@ -2,9 +2,9 @@
 
 This an implementation of [swag](https://github.com/tunapanda/swag) using Ember.js and [swagmapviewer](https://github.com/tunapanda/swagmapviewer) using Ember.js and SVG manipulation and uses the foundation front-end library for the UI.
 
-Currently you can only login with Facebook, but you can currently bypass this by going straight to `/swagmaps/1`.
+Currently you can only login with Facebook, but you can currently bypass this by going straight to http://tunapanda.github.io/swag-ember/#/swagmap/1.
 
-See an example of this running at http://jakeii.github.io/swag-ember
+See an example of this running at http://tunapanda.github.io/swag-ember
 
 ## Prerequisites
 
