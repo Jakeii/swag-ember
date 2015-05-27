@@ -11,8 +11,9 @@ main {
   min-height: 500px;
   min-width: 500px;
 
-  line {
+  .swag-line {
     stroke: #585EB5;
+    fill: transparent;
     stroke-width: 2;
   }
 }

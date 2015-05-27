@@ -53,7 +53,7 @@ export default Ember.Route.extend({
         "activity": activity
       },
       callback: (err, res) => {
-        if(err) return;
+        if(err !== undefined) return;
         res.statements.forEach((statement) => {
           if(statement.verb.id === 'http://adlnet.gov/expapi/verbs/completed') {
             model.set('completed', true);

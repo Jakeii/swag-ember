@@ -11,23 +11,36 @@ export default Ember.Component.extend(Ember.Evented, {
     var svg = SVG(this.get('element')).size(800, 800);
     this.set('svg', svg);
 
-    // draw lines whenever component is rendered and there are swagifacts available
-    if(this.get('swagifacts.length') > 0) {
-      this.drawLines();
-    }
+    this.redrawLine();
   },
 
   /**
-   * draws lines whenever swagifacts are added
+   * computes point string for polyline
    *
-   * @method drawLines
+   * @method points
    */
-  
-  drawLines: Ember.observer('swagifacts.[]', function() {
-    this.get('swagifacts').forEach((item, i, items) => {
-      if(i < items.length - 1) {
-        this.get('svg').line(item.get('x') + 25, item.get('y') + 25, items.objectAt(i + 1).get('x') + 25, items.objectAt(i + 1).get('y') + 25);
+    
+  points: Ember.computed('swagifacts.[]', function() {
+    return this.get('swagifacts').reduce(function(prev, item) {
+      console.log(item.get('label'));
+      return prev + (item.get('x') + 25) +  ',' + (item.get('y') + 25) + ' ';
+    }, '');
+  }),
+
+  /**
+   * redraws line whenever points change
+   *
+   * @method redrawLine
+   */
+
+  redrawLine: Ember.observer('points', function() {
+    Ember.run.schedule('afterRender', () => {
+      var svg = this.get('svg');
+
+      if(this.get('line')) {
+        return this.get('line').replace(svg.polyline(this.get('points')).addClass('swag-line'));
       }
+      this.set('line', svg.polyline(this.get('points')).addClass('swag-line'));
     });
   })
 });
