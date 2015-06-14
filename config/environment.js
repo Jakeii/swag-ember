@@ -12,7 +12,7 @@ module.exports = function(environment) {
       'img-src': 'self https://www.facebook.com',
       'style-src': '\'self\' \'unsafe-inline\'',
       'script-src': '\'self\' http://connect.facebook.net https://graph.facebook.com',
-      'connect-src': '\'self\' ws://localhost:35729 ws://0.0.0.0:35729 http://0.0.0.0:4200/csp-report http://localhost:8000'
+      'connect-src': '\'self\' ws://localhost:35729 ws://0.0.0.0:35729 http://0.0.0.0:4200/csp-report http://localhost:8000 https://rawgit.com'
     },
 
     EmberENV: {

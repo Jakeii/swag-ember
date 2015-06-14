@@ -1,5 +1,4 @@
 import DS from 'ember-data';
-import ENV from '../config/environment';
 
 var swagmap = DS.Model.extend({
   name: DS.attr(),
@@ -12,7 +11,7 @@ swagmap.reopenClass({
     {
       id: 1,
       name: 'ktouch',
-      map: (ENV.environment !== 'github') ? '/swagmaps/ktouch.json' : '/swag-ember/swagmaps/ktouch.json'
+      map: 'https://rawgit.com/tunapanda/swagmaps/master/KTouch/ktouch.json'
     }
   ]
 });
