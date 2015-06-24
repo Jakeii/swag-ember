@@ -5,11 +5,10 @@ export default Ember.Controller.extend({
   lrs: Ember.inject.service('lrs'),
   actions: {
     logOut: function() {
-      this.get('session').invalidate();
-      this.set('currentUser.model.email', null);
+      this.get('currentUser').logOut();
     },
     sessionAuthenticationSucceded: function() {
-      
+
     }
   }
 });
