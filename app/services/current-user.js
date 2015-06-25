@@ -13,10 +13,12 @@ export default Ember.Service.extend({
     this.set('store', store);
     this.set('session', this.container.lookup('simple-auth-session:main'));
 
-    this.store.find('user', 'current').then((user) => {
-       this.set('model', user);
-    }, function(err) {
-      console.log(err);
+    Ember.run(() => {
+      this.store.find('user', 'current').then((user) => {
+         this.set('model', user);
+      }, function(err) {
+        console.log(err);
+      });
     });
   },
 

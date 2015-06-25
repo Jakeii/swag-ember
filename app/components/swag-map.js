@@ -4,6 +4,8 @@ import Ember from 'ember';
 export default Ember.Component.extend(Ember.Evented, {
   classNames: ['swag-map'],
 
+  swagifacts: Ember.A(),
+  
   /**
    * Set up svg and trigger inital drawing
    *
@@ -74,7 +76,7 @@ export default Ember.Component.extend(Ember.Evented, {
   calculatePoints: Ember.observer('swagifacts.[]', 'verticalSeperation', 'curviness', 'mapLength', function() {
     Ember.run.schedule('afterRender', () => {
       var swagifacts = this.get('swagifacts');
-      var count = swagifacts.length;
+      var count = swagifacts.length || 0;
 
       if (count > 0) {
         var path = this.get('path');

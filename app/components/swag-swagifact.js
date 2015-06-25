@@ -17,7 +17,7 @@ export default Ember.Component.extend({
    */
 
   completed: Ember.computed('currentUser.model.completed.[]', function () {
-    return this.get('currentUser').hasCompleted(this.get('item'));
+    return this.get('currentUser') ? this.get('currentUser').hasCompleted(this.get('item')) : false;
   }),
 
   /**
@@ -29,12 +29,12 @@ export default Ember.Component.extend({
    */
 
   available: Ember.computed('item.requires.[]', 'currentUser.model.completed.[]', function () {
-    if(this.get('item.requires').length === 0) {
+    if(this.get('item.requires.length') === 0) {
       return true;
     }
-    return this.get('item.requires').every( (skill) => {
+    return this.get('item.requires') ? this.get('item.requires').every((skill) => {
       return this.get('currentUser').hasSkill(skill);
-    });
+    }) : [];
   }),
 
   /**
@@ -46,9 +46,9 @@ export default Ember.Component.extend({
    */
 
   requires: Ember.computed('item.requires.[]', 'currentUser.model.skills.[]', function () {
-    return this.get('item.requires').map((skill) => {
+    return this.get('item.requires') ? this.get('item.requires').map((skill) => {
       return Ember.Object.create({completed: this.get('currentUser').hasSkill(skill), name: skill.get('name')});
-    });
+    }) : [];
   }),
 
   /**
@@ -60,9 +60,9 @@ export default Ember.Component.extend({
    */
 
   provides: Ember.computed('item.provides.[]', 'currentUser.model.skills.[]', function () {
-    return this.get('item.provides').map((skill) => {
+    return this.get('item.provides') ? this.get('item.provides').map((skill) => {
       return Ember.Object.create({completed: this.get('currentUser').hasSkill(skill), name: skill.get('name')});
-    });
+    }) : [];
   }),
 
   actions: {

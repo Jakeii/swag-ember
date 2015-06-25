@@ -1,6 +1,6 @@
 import { moduleForComponent, test } from 'ember-qunit';
 
-moduleForComponent('swag-map-item', 'Unit | Component | swag map item', {
+moduleForComponent('swag-swagifact', 'Unit | Component | swag swagifact', {
   // Specify the other units that are required for this test
   // needs: ['component:foo', 'helper:bar']
 });
