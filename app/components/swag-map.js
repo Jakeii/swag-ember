@@ -5,7 +5,7 @@ export default Ember.Component.extend(Ember.Evented, {
   classNames: ['swag-map'],
 
   swagifacts: Ember.A(),
-  
+
   /**
    * Set up svg and trigger inital drawing
    *
@@ -14,7 +14,8 @@ export default Ember.Component.extend(Ember.Evented, {
    */
 
   didInsertElement: function() {
-    var svg = SVG(this.$('svg')[0]).size(800, 2000);
+    var elem = this.$('svg')[0];
+    var svg = SVG(elem).size(800, 2000);
     this.set('svg', svg);
     this.plotPath();
     this.calculatePoints();

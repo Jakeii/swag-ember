@@ -1,4 +1,4 @@
-# Swag-ember
+# Swag-ember [![Build Status](https://travis-ci.org/tunapanda/swag-ember.svg?branch=master)](https://travis-ci.org/tunapanda/swag-ember)
 
 This an implementation of [swag](https://github.com/tunapanda/swag) using Ember.js and [swagmapviewer](https://github.com/tunapanda/swagmapviewer) using Ember.js and SVG manipulation and uses the foundation front-end library for the UI.
 
