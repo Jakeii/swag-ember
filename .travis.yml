@@ -29,4 +29,8 @@ script:
   - npm test
 
 after_success:
-  - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && ./gh-pages-deploy.sh
+  - git config --global user.name "Jake Lee Kennedy"
+  - git config --global user.email "jake@bodhi.io"
+  - git config --global push.default simple
+  - npm run gh-pages
+  - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && git push "https://${DEPLOY_KEY}@${GH_REF}" `git subtree split --prefix dist master`:gh-pages --force
