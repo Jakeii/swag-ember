@@ -2,32 +2,29 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend(Ember.Evented, {
-  tagName: 'svg',
-
-  items: Ember.A(),
   classNames: ['swag-map'],
 
+  /**
+   * Set up svg and trigger inital drawing
+   *
+   * @method didInsertElement
+   *
+   */
 
   didInsertElement: function() {
-    var svg = SVG(this.get('element')).size(800, 2000);
+    var svg = SVG(this.$('svg')[0]).size(800, 2000);
     this.set('svg', svg);
     this.plotPath();
     this.calculatePoints();
   },
 
   /**
-   * computes point string for polyline
+   * Computes curved path
    *
    * @method points
    */
-    
+
   plotPath: Ember.observer('verticalSeperation', 'curviness', 'mapLength', function() {
-    // if(this.get('swagifacts')){
-    //   return 'M ' + this.get('swagifacts').reduce(function(prev, item, index) {
-    //     return prev + (index ? 'T ' : '') + (item.get('x') + 25) +  ',' + (item.get('y') + 25) + ' ';
-    //   }, '');
-    // }
-    // return '';
     Ember.run.schedule('afterRender', () => {
       if(this.get('path')) {
         this.get('path').remove();
@@ -42,9 +39,6 @@ export default Ember.Component.extend(Ember.Evented, {
 
       var start = [padding, padding];
       var startHandle = [padding, padding + curviness];
-
-      // var finish = [width - 50, width - 50];
-      // var finishHandle = [finish[0] - 50, finish[1] - 50];
 
       var pathDefinition = 'M ' + start.join(',');
 
@@ -63,14 +57,19 @@ export default Ember.Component.extend(Ember.Evented, {
           to = [padding, padding + (verticalSeperation * i)];
           handle = [padding, to[1] - curviness];
         }
-        
+
         pathDefinition += 'S ' + handle.join(',') + ' ' + to.join(',');
       }
-      console.log(pathDefinition);
+      //console.log(pathDefinition);
       path.plot(pathDefinition).addClass('swag-line');
       this.set('path', path);
     });
   }),
+
+  /*
+   * Calculate coordinates for each swagifacts
+   *
+   */
 
   calculatePoints: Ember.observer('swagifacts.[]', 'verticalSeperation', 'curviness', 'mapLength', function() {
     Ember.run.schedule('afterRender', () => {
@@ -82,7 +81,7 @@ export default Ember.Component.extend(Ember.Evented, {
         var length = this.get('path').length();
 
 
-        var sectionLength = length / (count - 2);
+        var sectionLength = length / (count - 1);
 
         for(var i = 1; i < count; i ++) {
           var point = path.pointAt(i * sectionLength);
@@ -102,25 +101,8 @@ export default Ember.Component.extend(Ember.Evented, {
         swagifacts.get('lastObject').setProperties({
           x: lastPoint.x - 25,
           y: lastPoint.y - 25
-        });     
+        });
       }
     });
   })
-
-  /**
-   * redraws line whenever points change
-   *
-   * @method redrawLine
-   */
-
-  // redrawPath: Ember.observer('path', function() {
-    
-  //     var svg = this.get('svg');
-
-  //     if(this.get('path')) {
-  //       return this.get('path').replace(svg.path(this.get('path')).addClass('swag-line'));
-  //     }
-  //     this.set('path', svg.path(this.get('path')).addClass('swag-line'));
-    
-  // })
 });

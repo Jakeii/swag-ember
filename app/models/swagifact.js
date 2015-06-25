@@ -1,9 +1,12 @@
 import DS from 'ember-data';
 
 export default DS.Model.extend({
-  label: DS.attr(),
+  name: DS.attr(),
+  description: DS.attr(),
+  xAPIID: DS.attr(),
   x: DS.attr('number'),
   y: DS.attr('number'),
-  completed: DS.attr('boolean', { defaultValue: false }),
+  provides: DS.hasMany('skill'),
+  requires: DS.hasMany('skill'),
   swagmap: DS.belongsTo('swagmap')
 });

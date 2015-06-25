@@ -11,8 +11,8 @@ module.exports = function(environment) {
       'frame-src': '\'self\' http://static.ak.facebook.com https://s-static.ak.facebook.com https://www.facebook.com',
       'img-src': 'self https://www.facebook.com',
       'style-src': '\'self\' \'unsafe-inline\'',
-      'script-src': '\'self\' http://connect.facebook.net https://graph.facebook.com',
-      'connect-src': '\'self\' ws://localhost:35729 ws://0.0.0.0:35729 http://0.0.0.0:4200/csp-report http://localhost:8000 https://rawgit.com'
+      'script-src': '\'self\' https://connect.facebook.net http://connect.facebook.net https://graph.facebook.com',
+      'connect-src': '\'self\' ws://localhost:35729 ws://0.0.0.0:35729 http://0.0.0.0:4200/csp-report http://localhost:8000 https://rawgit.com http://learninglocker.swag.testing.tunapanda.org'
     },
 
     EmberENV: {
@@ -23,9 +23,9 @@ module.exports = function(environment) {
     },
 
     APP: {
-      xAPIEndpoint: "http://localhost:8000/data/xAPI/",
-      xAPIUsername: "953b9fac8775b1806e3162c1794c7b12ffdccd61",
-      xAPIPassword: "7811a6436906242a93b5b986d8f760a33c75917e",
+      xAPIEndpoint: "http://learninglocker.swag.testing.tunapanda.org/data/xAPI/",
+      xAPIUsername: "caae95f54d6545c76fc289f02a3c1d51c455f7e6",
+      xAPIPassword: "40cb0287f95189298729f6ccc36f6277840604ad",
 
       // overide the login email with this email
       agentEmailOverride: 'jake@tunapanda.org',

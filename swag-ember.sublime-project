@@ -1,9 +1,0 @@
-{
-	"folders":
-	[
-		{
-			"path": ".",
-      "folder_exclude_patterns": [".bower*", ".idea", "node_modules", "tmp", "bower_components", ".live-archive"]
-		}
-	]
-}

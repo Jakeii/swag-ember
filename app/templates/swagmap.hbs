@@ -7,7 +7,7 @@
       <div class="large-12 columns">
         <label>Vertical Seperation
         <div>{{input type="range" value=verticalSeperation min="50" max="400"}}</div>
-        
+
         </label>
       </div>
     </div>
@@ -26,6 +26,15 @@
       </div>
     </div>
     </<fieldset>
+  </div>
+
+  <div class="overview">
+    <h3>User Skills:</h3>
+    <ul>
+      {{#each currentUser.model.skills as |skill|}}
+        <li>{{skill.name}}</li>
+      {{/each}}
+    </ul>
   </div>
 
 {{swag-map title=model.title swagifacts=model.swagifacts mapLength=mapLength verticalSeperation=verticalSeperation curviness=curviness}}
