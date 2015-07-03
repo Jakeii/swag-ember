@@ -28,7 +28,7 @@ module.exports = function(environment) {
       xAPIPassword: "7811a6436906242a93b5b986d8f760a33c75917e",
 
       // overide the login email with this email
-      agentEmailOverride: 'jake@tunapanda.org',
+      //agentEmailOverride: 'jake@tunapanda.org',
 
       // set to true to disable api requests and use fixtures in models/swagmap
       useFixtures: true

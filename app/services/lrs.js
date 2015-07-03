@@ -11,9 +11,9 @@ var tincan = new TinCan({
 });
 
 /**
- * Serivce that can be injected into any object that needs acces to the LRS 
+ * Serivce that can be injected into any object that needs acces to the LRS
  *
- * @extends Ember.Service 
+ * @extends Ember.Service
  */
 
 export default Ember.Service.extend({
@@ -25,10 +25,10 @@ export default Ember.Service.extend({
    *
    * @method agent
    */
-  
-  agent: Ember.computed('currentUser.model.content.email', function() {
+
+  agent: Ember.computed('currentUser.model.email', function() {
     return new TinCan.Agent({
-      'mbox': 'mailto:' + (ENV.APP.agentEmailOverride) ? ENV.APP.agentEmailOverride : this.get('currentUser.model.content.email')
+      'mbox': 'mailto:' + (ENV.APP.agentEmailOverride ? ENV.APP.agentEmailOverride : this.get('currentUser.model.email'))
     });
   })
 });

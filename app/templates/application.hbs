@@ -13,7 +13,7 @@
       {{#if session.isAuthenticated}}
         <li><a href="#" {{action 'logOut'}}>Logout</a></li>
         <li class="has-dropdown">
-          <a href="#">{{currentUser.model.content.email}}</a>
+          <a href="#">{{currentUser.model.email}}</a>
           <ul class="dropdown">
               <li><a href="#">Something</a></li>
           </ul>

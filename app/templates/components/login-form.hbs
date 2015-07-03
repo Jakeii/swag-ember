@@ -4,23 +4,21 @@
     <div class="small-6 small-centered columns">
     <button class="button" {{action 'fbLogin'}}>Login with Facebook</button>
     {{!-- <button class="button" {{action 'ghLogin'}}>Login with Github</button> --}}
-{{!--     <form {{action 'submit' on='submit'}}>
+    <form {{action 'login' on='submit'}}>
+      <p>
+        Or use your email address:
+      </p>
       <div class="row">
         <div class="large-12 columns">
           <label>Email
-            {{input placeholder='Email'}}
-          </label>
-        </div>
-        <div class="large-12 columns">
-          <label>Password
-            {{input type="password" placeholder='Password'}}
+            {{input placeholder='Email' value=email}}
           </label>
         </div>
       </div>
 
       <div class="row">
-
+        <button class="button" type="submit">Login</button>
       </div>
-    </form> --}}
+    </form>
     </div>
   </div>

@@ -4,7 +4,9 @@ import User from '../models/user';
 export default Ember.Service.extend({
   model: User.create(),
 
-  init: function() {
-    
+  init() {
+    if(this.get('model.email')) {
+      this.container.lookup('simple-auth-session:main').set('isAuthenticated', true);
+    }
   }
 });
