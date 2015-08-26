@@ -16,6 +16,36 @@ main {
   min-height: 500px;
   min-width: 500px;
 
+  .link {
+    fill: none;
+    stroke: #666;
+    stroke-width: 1.5px;
+  }
+
+  #licensing {
+    fill: green;
+  }
+
+  .link.licensing {
+    stroke: green;
+  }
+
+  .link.resolved {
+    stroke-dasharray: 0,2 1;
+  }
+
+  circle {
+    fill: #ccc;
+    stroke: #333;
+    stroke-width: 1.5px;
+  }
+
+  text {
+    font: 10px sans-serif;
+    pointer-events: none;
+    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+  }
+
   .swag-line {
     stroke: #585EB5;
     fill: transparent;
@@ -101,23 +131,7 @@ main {
 }
 
 .swagifact {
-  circle {
-    display: block;
-    position: absolute;
-    z-index: 10;
-    width: 50px;
-    height: 50px;
-    border-radius: 30px;
-    background-color: #ba4733;
-    transition: width 0.3s, height 0.3s;
 
-    cursor: pointer;
-
-    &:hover {
-      width: 60px;
-      height: 60px;
-    }
-  }
 
 
   &.available circle {

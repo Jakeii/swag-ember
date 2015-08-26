@@ -16,6 +16,11 @@ app.import({
   production: 'bower_components/svg.js/dist/svg.min.js',
 });
 
+app.import({
+  development: 'bower_components/d3/d3.js',
+  production: 'bower_components/d3/d3.min.js',
+});
+
 // Use `app.import` to add additional libraries to the generated
 // output files.
 //

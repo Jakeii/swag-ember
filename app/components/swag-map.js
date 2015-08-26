@@ -6,6 +6,27 @@ export default Ember.Component.extend(Ember.Evented, {
 
   swagifacts: Ember.A(),
 
+  d3data: function() {
+    let swagifacts = this.get('swagifacts');
+    let links = [];
+    let nodes = {};
+
+    swagifacts.forEach(function (swagifact) {
+      nodes[swagifact.get('name')] = {name: swagifact.get('name')};
+
+      let requirements = swagifact.get('requires');
+
+      swagifacts.find(function (item) {
+        if(swagifact.get('id') !== item.get('id') && requirements.every((requirement) => item.get('provides').findBy('id', requirement.get('id')))) {
+          links.push({source: swagifact.get('name'), target: item.get('name'), type: 'test'});
+        }
+      });
+
+    });
+
+    return links;
+  },
+
   /**
    * Set up svg and trigger inital drawing
    *
@@ -15,97 +36,75 @@ export default Ember.Component.extend(Ember.Evented, {
 
   didInsertElement: function() {
     var elem = this.$('svg')[0];
-    var svg = SVG(elem).size(800, 2000);
-    this.set('svg', svg);
-    this.plotPath();
-    this.calculatePoints();
+    var svg = d3.select(elem).attr('width', 800).attr('height', 800);
+
+    let links = this.d3data();
+    let nodes = {};
+
+    links.forEach(function(link) {
+      link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
+      link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+    });
+
+    var force = d3.layout.force()
+      .nodes(d3.values(nodes))
+      .links(links)
+      .size([800, 800])
+      .linkDistance(120)
+      .charge(-600)
+      .on("tick", tick)
+      .start();
+
+      // Per-type markers, as they don't inherit styles.
+  svg.append("defs").selectAll("marker")
+      .data(['test'])
+    .enter().append("marker")
+      .attr("id", function(d) { return d; })
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", 15)
+      .attr("refY", -1.5)
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 6)
+      .attr("orient", "auto")
+    .append("path")
+      .attr("d", "M0,-5L10,0L0,5");
+
+      var path = svg.append("g").selectAll("path")
+          .data(force.links())
+        .enter().append("path")
+          .attr("class", function(d) { return "link " + d.type; })
+          .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
+
+    var circle = svg.append("g").selectAll("circle")
+        .data(force.nodes())
+      .enter().append("circle")
+        .attr("r", 6)
+        .call(force.drag);
+
+        var text = svg.append("g").selectAll("text")
+            .data(force.nodes())
+          .enter().append("text")
+            .attr("x", 8)
+            .attr("y", ".31em")
+            .text(function(d) { return d.name; });
+
+    function tick() {
+      path.attr("d", linkArc);
+      circle.attr("transform", transform);
+      text.attr("transform", transform);
+    }
+
+    function linkArc(d) {
+      var dx = d.target.x - d.source.x,
+          dy = d.target.y - d.source.y,
+          dr = Math.sqrt(dx * dx + dy * dy);
+      return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+    }
+
+    function transform(d) {
+      return "translate(" + d.x + "," + d.y + ")";
+    }
   },
 
-  /**
-   * Computes curved path
-   *
-   * @method points
-   */
 
-  plotPath: Ember.observer('verticalSeperation', 'curviness', 'mapLength', function() {
-    Ember.run.schedule('afterRender', () => {
-      if(this.get('path')) {
-        this.get('path').remove();
-      }
-
-      var path = this.get('svg').path();
-      var verticalSeperation = Number(this.get('verticalSeperation'));
-      var length = Number(this.get('mapLength'));
-      var curviness = Number(this.get('curviness'));
-      var padding = 50;
-      var width = 800;
-
-      var start = [padding, padding];
-      var startHandle = [padding, padding + curviness];
-
-      var pathDefinition = 'M ' + start.join(',');
-
-      var secondPoint = [width - 50, start[1] + verticalSeperation];
-
-      var secondHandle = [secondPoint[0], secondPoint[1] - curviness];
-
-      pathDefinition += 'C ' + startHandle.join(',') + ' ' + secondHandle.join(',') + ' ' + secondPoint.join(',');
-
-      for (var i = 2; i < length; i++) {
-        var to, handle;
-        if(i % 2 !== 0) {
-          to = [width - padding, padding + ((verticalSeperation) * i)];
-          handle = [width - padding, to[1] - curviness];
-        } else {
-          to = [padding, padding + (verticalSeperation * i)];
-          handle = [padding, to[1] - curviness];
-        }
-
-        pathDefinition += 'S ' + handle.join(',') + ' ' + to.join(',');
-      }
-      //console.log(pathDefinition);
-      path.plot(pathDefinition).addClass('swag-line');
-      this.set('path', path);
-    });
-  }),
-
-  /*
-   * Calculate coordinates for each swagifacts
-   *
-   */
-
-  calculatePoints: Ember.observer('swagifacts.[]', 'verticalSeperation', 'curviness', 'mapLength', function() {
-    Ember.run.schedule('afterRender', () => {
-      var swagifacts = this.get('swagifacts');
-      var count = swagifacts.length || 0;
-
-      if (count > 0) {
-        var path = this.get('path');
-        var length = this.get('path').length();
-
-
-        var sectionLength = length / (count - 1);
-
-        for(var i = 1; i < count; i ++) {
-          var point = path.pointAt(i * sectionLength);
-          swagifacts.objectAt(i).setProperties({
-            x: point.x - 25,
-            y: point.y - 25
-          });
-        }
-
-        var firstPoint = path.pointAt(0);
-        swagifacts.get('firstObject').setProperties({
-          x: firstPoint.x - 25,
-          y: firstPoint.y - 25
-        });
-
-        var lastPoint = path.pointAt(length);
-        swagifacts.get('lastObject').setProperties({
-          x: lastPoint.x - 25,
-          y: lastPoint.y - 25
-        });
-      }
-    });
-  })
 });
