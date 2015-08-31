@@ -12,7 +12,7 @@ main {
 }
 
 .swag-map {
-  position: relative;
+  //position: relative;
   min-height: 500px;
   min-width: 500px;
 
@@ -44,50 +44,6 @@ main {
     font: 10px sans-serif;
     pointer-events: none;
     text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
-  }
-
-  .swag-line {
-    stroke: #585EB5;
-    fill: transparent;
-    stroke-width: 2;
-  }
-
-  .swagifacts {
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
-  .swagifact {
-    //position: absolute;
-    display: block;
-    list-style-type: none;
-    //top: 0;
-    //left: 0;
-    width: 50px;
-    //z-index: 1;
-
-    &:hover .swagifact-meta {
-      display: block;
-    }
-
-    .swag-icon {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-  }
-
-  .swagifact-name {
-    text-align: center;
-    white-space: nowrap;
-    margin-top: -35px;
-    cursor: pointer;
-    font-size: 1.5em;
-
   }
 
   .swagifact-meta {
@@ -131,8 +87,6 @@ main {
 }
 
 .swagifact {
-
-
 
   &.available circle {
     background-color: #585EB5;
