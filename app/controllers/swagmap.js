@@ -9,4 +9,18 @@ export default Ember.Controller.extend({
     });
     return skills;
   }),
+
+  allSkillsWanted: Ember.computed('skills.@each.wanted', {
+    set(key, value) {
+      if ( value === true ) {
+        return this.get('skills').setEach('wanted', true);
+      }
+
+      this.get('skills').setEach('wanted', false);
+    },
+    get() {
+      if (this.get('skills').every(skill => skill.get('wanted') === true)) return true;
+      return false;
+    }
+  })
 });

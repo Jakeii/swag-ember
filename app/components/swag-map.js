@@ -3,11 +3,11 @@ import Ember from 'ember';
 
 Array.prototype.containsEvery = function(values) {
   return values.every(value => this.contains(value));
-}
+};
 
 Array.prototype.containsAny = function(values) {
   return values.any(value => this.contains(value));
-}
+};
 
 export default Ember.Component.extend(Ember.Evented, {
   classNames: ['swag-map'],
@@ -31,36 +31,43 @@ export default Ember.Component.extend(Ember.Evented, {
   skillsNotInMap: Ember.computed.setDiff('wantedSkills', 'skillsInMap'),
 
   d3data: function() {
-    let swagifacts = this.get('swagifacts');
+    Ember.run.schedule('actions', () => {
+      let swagifacts = this.get('swagifacts');
 
-    this.set('skillsInMap', []);
-    this.set('nodes', []);
-    this.set('links', []);
+      this.set('skillsInMap', []);
+      this.set('nodes', []);
+      this.set('links', []);
 
-    console.log('want %d skills', this.get('wantedSkills.length'));
+      console.log('want %d skills', this.get('wantedSkills.length'));
 
-    let start = {name: 'start', level: 0, fixed: true, x: 20, y: 250};
-    this.get('nodes').push(start);
+      let start = {name: 'start', fixed: true, x: 20, y: 20};
+      this.get('nodes').push(start);
 
 
-    let lastNodeAdded = start;
-    let i = 0; // prevent infinate loop while working on this
-    while(this.get('skillsNotInMap.length') > 0 && i < 20) {
-      swagifacts.forEach(swagifact => {
-        if(Array.prototype.containsAny.call(swagifact.get('provides'), this.get('skillsNotInMap'))) {
-          let node = { name: swagifact.get('name'), level: 1, model: swagifact };
-          this.get('nodes').addObject(node);
-          this.get('skillsInMap').addObjects(swagifact.get('provides'));
-          this.get('links').addObject({ source: lastNodeAdded, target: node, length: 1 });
-          console.log('node added %s', swagifact.get('name'));
-          console.log(this.get('skillsNotInMap.length'));
-          lastNodeAdded = node;
-        }
-      });
-      i++;
-    }
+      let lastNodeAdded = start;
+      let i = 0; // prevent infinate loop while working on this
+      while(this.get('skillsNotInMap.length') > 0 && i < 20) {
+        swagifacts.forEach(swagifact => {
+          if(Array.prototype.containsAny.call(swagifact.get('provides'), this.get('skillsNotInMap'))) {
+            let node = { name: swagifact.get('name'), model: swagifact };
+            this.get('nodes').addObject(node);
+            this.get('skillsInMap').addObjects(swagifact.get('provides'));
+            this.get('links').addObject({ source: lastNodeAdded, target: node });
+            console.log('node added %s', swagifact.get('name'));
+            console.log(this.get('skillsNotInMap.length'));
+            lastNodeAdded = node;
+          }
+        });
+        i++;
+      }
 
-  }.observes('wantedSkills.[]'),
+      this.get('nodes.lastObject').fixed = true;
+      this.get('nodes.lastObject').x = 900 - 20;
+      this.get('nodes.lastObject').y = 500 - 20;
+
+    });
+
+  }.observes('wantedSkills.[]').on('init'),
 
   /**
    * Set up svg and trigger inital drawing
@@ -68,25 +75,19 @@ export default Ember.Component.extend(Ember.Evented, {
    * @method didInsertElement
    *
    */
-
   didInsertElement: function() {
     console.log('swagifacts loaded: %d', this.get('swagifacts.length'));
-    let component = this;
-      var elem = this.$('svg')[0];
-      var svg = d3.select(elem).attr('width', 900).attr('height', 500);
 
-      this.d3data();
+    this.draw();
+  },
 
-      var force = d3.layout.force()
-        .nodes(this.get('nodes'))
-        .links(this.get('links'))
-        .size([900, 500])
-        .linkDistance(200)
-        .charge(-30)
-        .on("tick", tick)
-        .start();
+  draw() {
+    this.$('svg').replaceWith('<svg />');
+    let elem = this.$('svg')[0];
+    let svg = d3.select(elem).attr('width', 900).attr('height', 500);
+    this.set('svg', svg);
 
-        // Per-type markers, as they don't inherit styles.
+    // Per-type markers, as they don't inherit styles.
     svg.append("defs").selectAll("marker")
         .data(['test'])
       .enter().append("marker")
@@ -100,51 +101,73 @@ export default Ember.Component.extend(Ember.Evented, {
       .append("path")
         .attr("d", "M0,-5L10,0L0,5");
 
-        var path = svg.append("g").selectAll("path")
-            .data(force.links())
-          .enter().append("path")
-            .attr("class", function(d) { return "link" + (d.invisible ? " invisible" : ""); })
-            .attr("marker-end", function(d) { return "url(" + window.location.pathname + "#test)"; });
+    let force = d3.layout.force()
+      .nodes(this.get('nodes'))
+      .links(this.get('links'))
+      .size([900, 500])
+      .linkDistance(100)
+      .charge(-100)
+      .on("tick", this.tick.bind(this))
+      .start();
 
-      var circle = svg.append("g").selectAll("circle")
-          .data(force.nodes())
-        .enter().append("circle")
-          .attr("class", function(d) { return "node-level" + d.level; })
-          .attr("r", 20)
-          .call(force.drag);
-
-          var text = svg.append("g").selectAll("text")
-              .data(force.nodes())
-            .enter().append("text")
-              .attr("x", 8)
-              .attr("y", ".81em")
-              .text(function(d) { return d.name; });
-
-
-      function tick(e) {
-        path.attr("d", linkArc);
-        circle.attr("transform", transform);
-        text.attr("transform", transform);
-
-        // var k = 6 * e.alpha;
-        // component.nodes.forEach(function(node, i) {
-        //   if(node.level === 3) {
-        //     node.x += 10 * k;
-        //   }
-        // })
-      }
-
-      function linkArc(d) {
-        var dx = d.target.x - d.source.x,
-            dy = d.target.y - d.source.y,
-            dr = (dx * dx + dy * dy) * d.length;
-        return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
-      }
-
-      function transform(d) {
-        return "translate(" + d.x + "," + d.y + ")";
-      }
+      this.set('force', force);
   },
 
+  redraw: function() {
+    Ember.run.schedule('actions', () => {
+
+    // this.get('force').nodes(this.get('nodes'))
+    // .links(this.get('links')).start();
+    // this.propertyDidChange('force');
+    this.draw();
+  });
+  }.observes('nodes', 'links'),
+
+  path: function() {
+    return this.get('svg').append("g").selectAll("path")
+        .data(this.get('force').links())
+      .enter().append("path")
+        .attr("class", function() { return "link"; })
+        .attr("marker-end", function() { return "url(" + window.location.pathname + "#test)"; });
+  }.property('force'),
+
+  circle: function() {
+    return this.get('svg').append("g").selectAll("circle")
+        .data(this.get('force').nodes())
+      .enter().append("circle")
+        .attr("class", function(d) { return "node-level" + d.level; })
+        .attr("r", 10)
+        .call(this.get('force').drag);
+  }.property('force'),
+
+  text: function() {
+    return this.get('svg').append("g").selectAll("text")
+        .data(this.get('force').nodes())
+      .enter().append("text")
+        .attr("x", 8)
+        .attr("y", ".81em")
+        .text(function(d) { return d.name; });
+  }.property('force'),
+
+  tick(e) {
+    this.get('path').attr("d", linkArc);
+    this.get('circle').attr("transform", transform);
+    this.get('text').attr("transform", transform);
+
+    // var k = 6 * e.alpha;
+    // this.get('nodes.lastObject').x += 10 * k;
+
+
+    function linkArc(d) {
+      var dx = d.target.x - d.source.x,
+          dy = d.target.y - d.source.y,
+          dr = (dx * dx + dy * dy);
+      return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+    }
+
+    function transform(d) {
+      return "translate(" + d.x + "," + d.y + ")";
+    }
+  }
 
 });
