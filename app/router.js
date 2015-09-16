@@ -6,7 +6,6 @@ var Router = Ember.Router.extend({
 });
 
 Router.map(function() {
-  this.route('swagmaps');
   this.route('swagmap', {path: '/swagmap/:swagmap_id'});
 });
 

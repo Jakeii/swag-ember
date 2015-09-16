@@ -9,49 +9,12 @@ export default Ember.Service.extend({
    */
 
   init() {
-    var store = this.container.lookup('service:store');
-    this.set('store', store);
-    this.set('session', this.container.lookup('simple-auth-session:main'));
-
-    Ember.run(() => {
-      this.store.find('user', 'current').then((user) => {
-         this.set('model', user);
-      }, function(err) {
-        console.log(err);
-      });
-    });
+    this.set('email', window.localStorage.getItem('LRS:email'));
   },
 
-  /**
-   * creates a localstorage session for the email from the FB lgin
-   *
-   * @method login
-   *
-   */
-
-  login(email) {
-    var model = this.store.createRecord('user', {
-      id: 'current',
-      email: email
-    });
-    model.save().then((user) => {
-      this.set('model', user);
-    });
-  },
-
-  /**
-   * Deletes user session from localstorage
-   *
-   * @method logOut
-   *
-   * @return {[type]} [description]
-   */
-
-  logOut() {
-    this.get('model').destroyRecord().then(() => {
-      this.get('session').invalidate();
-    });
-  },
+  saveEmail: Ember.observer('email', function() {
+    window.localStorage && window.localStorage.setItem('LRS:email', this.get('email'));
+  }),
 
   /**
    * helper to determine if a user has compelted a given swagifact

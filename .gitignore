@@ -16,3 +16,7 @@
 /libpeerconnection.log
 npm-debug.log
 testem.log
+convertAPI.js
+v1.0.json
+v2.0.json
+server

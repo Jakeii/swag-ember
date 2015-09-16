@@ -1,6 +1,7 @@
 @import "settings";
 
-@import "foundation";
+@import "../../bower_components/bootstrap/scss/bootstrap";
+@import "bower_components/font-awesome/scss/font-awesome";
 
 * {
   transition: all 0.4s;
@@ -20,22 +21,19 @@ main {
     fill: none;
     stroke: #666;
     stroke-width: 1.5px;
+
+    &.invisible {
+      stroke: none;
+    }
   }
 
-  #licensing {
-    fill: green;
-  }
 
-  .link.licensing {
+  .node-level0 {
     stroke: green;
   }
 
-  .link.resolved {
-    stroke-dasharray: 0,2 1;
-  }
-
   circle {
-    fill: #ccc;
+    fill: #fff;
     stroke: #333;
     stroke-width: 1.5px;
   }
@@ -109,4 +107,8 @@ main {
 
 .overview {
   left: 0;
+}
+
+.fade-row {
+  opacity: 0.3;
 }

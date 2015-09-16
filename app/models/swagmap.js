@@ -3,7 +3,6 @@ import DS from 'ember-data';
 var swagmap = DS.Model.extend({
   name: DS.attr(),
   description: DS.attr(),
-  xAPIID: DS.attr(),
   swagifacts: DS.hasMany('swagifact')
 });
 

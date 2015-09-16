@@ -1,5 +1,8 @@
-{{#unless session.isAuthenticated}}
-  {{login-form}}
-{{else}}
-{{#link-to 'swagmaps' class='button text-center'}}Go to Swagmaps >{{/link-to}}
-{{/unless}}
+<div class="col-md-12">
+  <h1>Select A Swag Map</h1>
+  <div class="list-group">
+  {{#each model as |swagmap|}}
+    {{#link-to 'swagmap' swagmap class="list-group-item"}}{{swagmap.name}}{{/link-to}}
+  {{/each}}
+</div>
+</div>
