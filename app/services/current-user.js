@@ -13,7 +13,7 @@ export default Ember.Service.extend({
   },
 
   saveEmail: Ember.observer('email', function() {
-    window.localStorage && window.localStorage.setItem('LRS:email', this.get('email'));
+    if(window.localStorage) window.localStorage.setItem('LRS:email', this.get('email'));
   }),
 
   /**

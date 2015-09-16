@@ -15,7 +15,7 @@
   },
   "repository": "",
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 0.12.0"
   },
   "author": "",
   "license": "MIT",
@@ -45,10 +45,6 @@
     "express": "^4.13.0",
     "glob": "^4.5.3",
     "http-proxy": "^1.11.1",
-    "morgan": "^1.6.0",
-    "torii": "0.4.1"
-  },
-  "dependencies": {
-    "ember-data": "^2.0.0"
+    "morgan": "^1.6.0"
   }
 }

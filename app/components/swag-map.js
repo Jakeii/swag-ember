@@ -31,6 +31,20 @@ export default Ember.Component.extend(Ember.Evented, {
   skillsNotInMap: Ember.computed.setDiff('wantedSkills', 'skillsInMap'),
 
   d3data: function() {
+    let lastNodeAdded;
+
+    function handleSwagifact(swagifact) {
+      if(Array.prototype.containsAny.call(swagifact.get('provides'), this.get('skillsNotInMap'))) {
+        let node = { name: swagifact.get('name'), model: swagifact };
+        this.get('nodes').addObject(node);
+        this.get('skillsInMap').addObjects(swagifact.get('provides'));
+        this.get('links').addObject({ source: lastNodeAdded, target: node });
+        console.log('node added %s', swagifact.get('name'));
+        console.log(this.get('skillsNotInMap.length'));
+        lastNodeAdded = node;
+      }
+    }
+
     Ember.run.schedule('actions', () => {
       let swagifacts = this.get('swagifacts');
 
@@ -44,20 +58,10 @@ export default Ember.Component.extend(Ember.Evented, {
       this.get('nodes').push(start);
 
 
-      let lastNodeAdded = start;
+      lastNodeAdded = start;
       let i = 0; // prevent infinate loop while working on this
       while(this.get('skillsNotInMap.length') > 0 && i < 20) {
-        swagifacts.forEach(swagifact => {
-          if(Array.prototype.containsAny.call(swagifact.get('provides'), this.get('skillsNotInMap'))) {
-            let node = { name: swagifact.get('name'), model: swagifact };
-            this.get('nodes').addObject(node);
-            this.get('skillsInMap').addObjects(swagifact.get('provides'));
-            this.get('links').addObject({ source: lastNodeAdded, target: node });
-            console.log('node added %s', swagifact.get('name'));
-            console.log(this.get('skillsNotInMap.length'));
-            lastNodeAdded = node;
-          }
-        });
+        swagifacts.forEach(handleSwagifact);
         i++;
       }
 
@@ -78,7 +82,7 @@ export default Ember.Component.extend(Ember.Evented, {
   didInsertElement: function() {
     console.log('swagifacts loaded: %d', this.get('swagifacts.length'));
 
-    this.draw();
+    Ember.run(() => this.draw());
   },
 
   draw() {
@@ -149,7 +153,7 @@ export default Ember.Component.extend(Ember.Evented, {
         .text(function(d) { return d.name; });
   }.property('force'),
 
-  tick(e) {
+  tick() {
     this.get('path').attr("d", linkArc);
     this.get('circle').attr("transform", transform);
     this.get('text').attr("transform", transform);

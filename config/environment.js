@@ -36,18 +36,6 @@ module.exports = function(environment) {
     }
   };
 
-  ENV['simple-auth'] = {
-    store: 'simple-auth-session-store:local-storage',
-    'authenticationRoute': 'index'
-  };
-
-  ENV['torii'] = {
-    providers: {
-      'facebook-connect': {
-        appId: '256282564410162'
-      }
-    }
-  };
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;

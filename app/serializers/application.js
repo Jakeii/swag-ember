@@ -9,19 +9,19 @@ export default DS.RESTSerializer.extend({
 
     if(hash.swagifacts) {
       hash.swagifacts = hash.swagifacts.map(function(swagifact) {
-        return swagifact.split('/').pop()
+        return swagifact.split('/').pop();
       });
     }
 
     if(hash.requires) {
       hash.requires = hash.requires.map(function(skill) {
-        return skill.split('/').pop()
+        return skill.split('/').pop();
       });
     }
 
     if(hash.provides) {
       hash.provides = hash.provides.map(function(skill) {
-        return skill.split('/').pop()
+        return skill.split('/').pop();
       });
     }
     return this._super(model, hash, prop);
