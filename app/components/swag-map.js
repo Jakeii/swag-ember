@@ -32,7 +32,6 @@ export default Ember.Component.extend(Ember.Evented, {
 
   d3data: function() {
     let lastNodeAdded;
-
     function handleSwagifact(swagifact) {
       if(Array.prototype.containsAny.call(swagifact.get('provides'), this.get('skillsNotInMap'))) {
         let node = { name: swagifact.get('name'), model: swagifact };
@@ -61,7 +60,7 @@ export default Ember.Component.extend(Ember.Evented, {
       lastNodeAdded = start;
       let i = 0; // prevent infinate loop while working on this
       while(this.get('skillsNotInMap.length') > 0 && i < 20) {
-        swagifacts.forEach(handleSwagifact);
+        swagifacts.forEach(handleSwagifact.bind(this));
         i++;
       }
 

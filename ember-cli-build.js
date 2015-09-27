@@ -16,11 +16,6 @@ module.exports = function(defaults) {
   });
 
   app.import({
-    development: 'bower_components/svg.js/dist/svg.js',
-    production: 'bower_components/svg.js/dist/svg.min.js',
-  });
-
-  app.import({
     development: 'bower_components/d3/d3.js',
     production: 'bower_components/d3/d3.min.js',
   });
