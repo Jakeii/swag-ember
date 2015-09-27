@@ -32,15 +32,26 @@ export default Ember.Component.extend(Ember.Evented, {
 
   d3data: function() {
     let lastNodeAdded;
+    this.get('swagifacts').setEach('inMap', false);
+    this.get('swagifacts').setEach('dependenciesMet', true);
+
     function handleSwagifact(swagifact) {
-      if(Array.prototype.containsAny.call(swagifact.get('provides'), this.get('skillsNotInMap'))) {
+      let containsWantedSkills = Array.prototype.containsAny.call(swagifact.get('provides'), this.get('skillsNotInMap'));
+      let dependenciesMet = Array.prototype.containsEvery.call(this.get('skillsInMap'), swagifact.get('requires'));
+
+      if(containsWantedSkills && dependenciesMet) {
         let node = { name: swagifact.get('name'), model: swagifact };
         this.get('nodes').addObject(node);
+        swagifact.set('inMap', true);
+        swagifact.set('dependenciesMet', true);
         this.get('skillsInMap').addObjects(swagifact.get('provides'));
         this.get('links').addObject({ source: lastNodeAdded, target: node });
         console.log('node added %s', swagifact.get('name'));
         console.log(this.get('skillsNotInMap.length'));
         lastNodeAdded = node;
+      }
+      if(swagifact.get('provides.length') > 0 && !dependenciesMet) {
+        swagifact.set('dependenciesMet', false);
       }
     }
 
@@ -65,7 +76,7 @@ export default Ember.Component.extend(Ember.Evented, {
       }
 
       this.get('nodes.lastObject').fixed = true;
-      this.get('nodes.lastObject').x = 900 - 20;
+      this.get('nodes.lastObject').x = 900 - 100;
       this.get('nodes.lastObject').y = 500 - 20;
 
     });
@@ -118,7 +129,6 @@ export default Ember.Component.extend(Ember.Evented, {
 
   redraw: function() {
     Ember.run.schedule('actions', () => {
-
     // this.get('force').nodes(this.get('nodes'))
     // .links(this.get('links')).start();
     // this.propertyDidChange('force');
@@ -140,6 +150,9 @@ export default Ember.Component.extend(Ember.Evented, {
       .enter().append("circle")
         .attr("class", function(d) { return "node-level" + d.level; })
         .attr("r", 10)
+        .on('mouseover', function(d) {
+          this.set('currentSwagifact', d.model);
+        }.bind(this))
         .call(this.get('force').drag);
   }.property('force'),
 

@@ -1,38 +1,62 @@
 <div class="col-md-9">
   <h1 class="display-4">{{model.name}}</h1>
 
-  {{swag-map swagifacts=model.swagifacts}}
+  {{swag-map swagifacts=model.swagifacts currentSwagifact=currentSwagifact}}
 </div>
 
 <div class="col-md-3">
-  <h3>Skills:</h3>
-  <p>
-    Uncheck skills you don't want/need.
-  </p>
-  <table class="table table-sm">
-    <thead>
-      <tr>
-        <th>
-          {{input type="checkbox" checked=allSkillsWanted}}
-        </th>
-        <th>
-          Name
-        </th>
-        <th>
-          fufilled
-        </th>
-      </tr>
-    </thead>
-    <tbody>
+  <section>
+    <h3>Skills:</h3>
+    <p>
+      Uncheck skills you don't want/need.
+    </p>
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th>
+            {{input type="checkbox" checked=allSkillsWanted}}
+          </th>
+          <th>
+            Name
+          </th>
+          <th>
+            fufilled
+          </th>
+        </tr>
+      </thead>
+      <tbody>
 
-    {{#each skills as |skill|}}
-      <tr class="{{unless skill.wanted 'fade-row'}}">
-        <td>{{input type="checkbox" checked=skill.wanted}}</td>
-        <td>{{skill.name}}</td>
-        <td>{{#if skill.fufilled}}{{fa-icon 'tick'}}{{else}}{{fa-icon 'times'}}{{/if}}</td>
-      </tr>
-    {{/each}}
+      {{#each skills as |skill|}}
+        <tr class="{{unless skill.wanted 'fade-row'}}">
+          <td>{{input type="checkbox" checked=skill.wanted}}</td>
+          <td>{{skill.name}}</td>
+          <td>{{#if skill.fufilled}}{{fa-icon 'tick'}}{{else}}{{fa-icon 'times'}}{{/if}}</td>
+        </tr>
+      {{/each}}
 
-  </tbody>
-  </table>
+    </tbody>
+    </table>
+  </section>
+  <section>
+    <h4>Swagifacts</h4>
+    <table class="table table-sm">
+      <tbody>
+
+      {{#each model.swagifacts as |swagifact|}}
+        <tr class="{{unless swagifact.inMap 'fade-row'}} {{unless swagifact.dependenciesMet 'table-danger'}}" {{action 'swagifactHover' swagifact on='mouseEnter'}}>
+          <td>{{swagifact.name}}</td>
+        </tr>
+      {{/each}}
+
+    </tbody>
+    </table>
+    <ul>
+      <li>
+        <em><span style="background-color: #f2dede;">red</span> = unmet skill dependencies</em>
+      </li>
+      <li>
+        <em><span style="opacity: 0.3;">grey</span> = contains no wanted skills</em>
+      </li>
+    </ul>
+  </section>
 </div>

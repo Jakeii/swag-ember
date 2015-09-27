@@ -2,6 +2,7 @@ import DS from 'ember-data';
 
 export default DS.RESTSerializer.extend({
   normalize(model, hash, prop) {
+    hash.link = hash.id;
     hash.id = hash.id.split('/').pop();
     hash.name = hash.definition.name['en-US'];
     hash.description = hash.definition.description ? hash.definition.description['en-US'] : '';

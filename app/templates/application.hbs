@@ -5,7 +5,7 @@
         Quick Switch
       </button>
       <div class="dropdown-menu">
-        {{#each index.model as |swagmap|}}
+        {{#each swagmaps as |swagmap|}}
           {{#link-to 'swagmap' swagmap class="dropdown-item"}}{{swagmap.name}}{{/link-to}}
         {{/each}}
       </div>

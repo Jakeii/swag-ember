@@ -1,3 +1,48 @@
 <svg>
 
 </svg>
+
+{{#if currentSwagifact}}
+<aside class="card card-block">
+  <h3 class="card-title">Info: {{currentSwagifact.name}}</h3>
+  <table class="table table-sm">
+    <tbody>
+      <tr>
+        <td scope="row">
+          Requires
+        </td>
+        <td>
+          <ul>
+            {{#each currentSwagifact.requires as |requires|}}
+              <li>{{requires.name}}</li>
+            {{/each}}
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td scope="row">
+          Provides
+        </td>
+        <td>
+          <ul>
+            {{#each currentSwagifact.provides as |provides|}}
+              <li>{{provides.name}}</li>
+            {{/each}}
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td scope="row">
+          Link
+        </td>
+        <td>
+          <a href="{{currentSwagifact.link}}">{{currentSwagifact.link}}</a>
+        </td>
+      </tr>
+  </tbody>
+  </table>
+
+</aside>
+{{else}}
+<p>Hover over swagifact for info.</p>
+{{/if}}

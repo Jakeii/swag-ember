@@ -2,6 +2,12 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
   currentUser: Ember.inject.service('current-user'),
+  actions: {
+    swagifactHover(swagifact) {
+      this.set('currentSwagifact', swagifact);
+    }
+  },
+
   skills: Ember.computed('model.swagifacts', function() {
     let skills = Ember.A();
     this.get('model.swagifacts').forEach((swagifact) => {

@@ -20,6 +20,11 @@ module.exports = function(defaults) {
     production: 'bower_components/d3/d3.min.js',
   });
 
+  app.import({
+    development: 'bower_components/bootstrap/dist/js/bootstrap.js',
+    production: 'bower_components/bootstrap/dist/js/bootstrap.min.js',
+  });
+
   // Use `app.import` to add additional libraries to the generated
   // output files.
   //
