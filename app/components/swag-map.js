@@ -13,10 +13,32 @@ export default Ember.Component.extend(Ember.Evented, {
   classNames: ['swag-map'],
 
   swagifacts: [],
-  nodes: [],
-  links: [],
 
-  skillsInMap: [],
+  startNode: {name: 'start', fixed: true, x: 20, y: 20},
+
+  nodes: function() {
+    let nodes = [this.get('startNode')];
+
+    this.get('swagifacts').forEach(swagifact => {
+      if (swagifact.get('inMap') === true) {
+        nodes.push({ name: swagifact.get('name'), model: swagifact });
+      }
+    });
+
+    return nodes;
+  }.property('swagifacts.@each.inMap'),
+
+  links: function() {
+    let nodes = this.get('nodes');
+    let links = [];
+
+    for(let i = 0; i < nodes.length; i ++) {
+      if(nodes[i+1]) {
+        links.push({source: this.get('nodes')[i], target: this.get('nodes')[i+1]});
+      }
+    }
+    return links;
+  }.property('nodes.[]'),
 
   skills: function() {
     var skills = [];
@@ -28,53 +50,44 @@ export default Ember.Component.extend(Ember.Evented, {
 
   wantedSkills: Ember.computed.filterBy('skills', 'wanted', true),
 
-  skillsNotInMap: Ember.computed.setDiff('wantedSkills', 'skillsInMap'),
+  neededSkills: function() {
+    this.get('wantedSkills');
+  }
+  // wantedSkillsInMap: Ember.computed.filterBy('wantedSkills', 'inMap', true),
+
+  wantedSkillsNotInMap: Ember.computed.filterBy('wantedSkills', 'inMap', false),
 
   d3data: function() {
-    let lastNodeAdded;
+
+    // Clear Swagmap
     this.get('swagifacts').setEach('inMap', false);
-    this.get('swagifacts').setEach('dependenciesMet', true);
+    //this.get('swagifacts').setEach('dependenciesMet', true);
 
+    // Adds a swagifact to the map if it contains wanted skills
     function handleSwagifact(swagifact) {
-      let containsWantedSkills = Array.prototype.containsAny.call(swagifact.get('provides'), this.get('skillsNotInMap'));
-      let dependenciesMet = Array.prototype.containsEvery.call(this.get('skillsInMap'), swagifact.get('requires'));
+      //let containsWantedSkills = Array.prototype.containsAny.call(swagifact.get('provides'), this.get('wantedSkillsNotInMap'));
+      // let dependenciesMet = Array.prototype.containsEvery.call(this.get('skillsInMap'), swagifact.get('requires'));
 
-      if(containsWantedSkills && dependenciesMet) {
-        let node = { name: swagifact.get('name'), model: swagifact };
-        this.get('nodes').addObject(node);
+      if(swagifact.get('containsWantedSkills')/* && dependenciesMet */) {
         swagifact.set('inMap', true);
-        swagifact.set('dependenciesMet', true);
-        this.get('skillsInMap').addObjects(swagifact.get('provides'));
-        this.get('links').addObject({ source: lastNodeAdded, target: node });
-        console.log('node added %s', swagifact.get('name'));
-        console.log(this.get('skillsNotInMap.length'));
-        lastNodeAdded = node;
       }
-      if(swagifact.get('provides.length') > 0 && !dependenciesMet) {
-        swagifact.set('dependenciesMet', false);
-      }
+      // if(swagifact.get('provides.length') > 0 && !dependenciesMet) {
+      //   swagifact.set('dependenciesMet', false);
+      // }
     }
 
     Ember.run.schedule('actions', () => {
       let swagifacts = this.get('swagifacts');
 
-      this.set('skillsInMap', []);
-      this.set('nodes', []);
-      this.set('links', []);
-
       console.log('want %d skills', this.get('wantedSkills.length'));
 
-      let start = {name: 'start', fixed: true, x: 20, y: 20};
-      this.get('nodes').push(start);
-
-
-      lastNodeAdded = start;
       let i = 0; // prevent infinate loop while working on this
-      while(this.get('skillsNotInMap.length') > 0 && i < 20) {
+      while(this.get('wantedSkillsNotInMap.length') > 0 && i < 20) {
         swagifacts.forEach(handleSwagifact.bind(this));
         i++;
       }
 
+      // fix last node to bottom right
       this.get('nodes.lastObject').fixed = true;
       this.get('nodes.lastObject').x = 900 - 100;
       this.get('nodes.lastObject').y = 500 - 20;

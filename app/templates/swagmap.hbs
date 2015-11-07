@@ -27,8 +27,8 @@
       <tbody>
 
       {{#each skills as |skill|}}
-        <tr class="{{unless skill.wanted 'fade-row'}}">
-          <td>{{input type="checkbox" checked=skill.wanted}}</td>
+        <tr class="{{unless skill.inMap 'fade-row'}}">
+          <td>{{input type="checkbox" checked=skill.wanted disabled=skill.forcedInMap}}</td>
           <td>{{skill.name}}</td>
           <td>{{#if skill.fufilled}}{{fa-icon 'tick'}}{{else}}{{fa-icon 'times'}}{{/if}}</td>
         </tr>
